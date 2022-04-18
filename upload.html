@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <title>Form</title>
+        <style>
+            .border{
+                border: 2px solid;
+                margin: auto;
+                width: 50%;
+                height: auto;
+                background-color: #ffffff;
+            }
+        </style>
+    </head>
+        <div style="text-align: center;height: 100%;background:blueviolet;">
+            <h1>Form</h1>
+            <div class="border">
+            <form method="post" action="view.html">
+                <table style="margin: auto;" cellpadding="30">
+                
+                <tr>
+                    <td>JSON file upload:</td><td><input type="file" id="jsonfile" onchange="onChange(event);" name="jsonfile"  accept=".json"/></td>
+                </tr>
+                <tr>
+                    <td>profile photo:</td>
+                    <td><input type="file" id="profile" onchange="onChangefile(event);" name="profile" accept="image/*"/></td>
+                    <td><img id="profileimg"></td>
+                </tr>
+                <tr>
+                    <td><button type="submit" onclick="anotherpage()">Submit</button></td>
+                </tr> 
+            </table>
+            </form>
+        </div>
+        </div>
+</html>
+<script>
+    localStorage.clear();
+    var obj="";
+    var photo="";
+    function onChange(event) {
+        var reader = new FileReader();
+        reader.onload = onReaderLoad;
+        reader.readAsText(event.target.files[0]);
+    }
+    function onReaderLoad(event){
+         obj = JSON.parse(event.target.result);
+       console.log(obj);
+    }
+    function onChangefile(event){
+        var tmppath = URL.createObjectURL(event.target.files[0]);
+        var photo = event;
+       
+        console.log(photo);
+        
+        var image = document.getElementById('profileimg');
+        image.src=tmppath;
+        image.style.width="150px"
+
+        var reader = new FileReader();
+        reader.addEventListener("load",()=>{
+            localStorage["photo"] = reader.result;
+        })
+        reader.readAsDataURL(event.target.files[0]);
+    }
+    
+    function anotherpage(){
+       json= {
+            "details":obj
+        }
+        console.log(json);
+        localStorage["myobj"] = JSON.stringify(json);
+        
+       // location.replace("file:///D:/html/view.html");
+        
+    }
+</script>
